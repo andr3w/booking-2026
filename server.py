@@ -1,4 +1,4 @@
-from flask import Flask
+from flask import Flask, request
 
 app = Flask(__name__)
 booking = [
@@ -9,8 +9,17 @@ booking = [
 @app.route("/", methods=["GET"])
 def index():
     return """
+    <script src=/static/m.js defer></script>
     <script src=/static/booking.js defer></script>
     <h1>Welcome to the Booking API</h1>"""
+
+@app.route("/api/booking", methods=["POST"])
+def make_booking():
+    data = request.get_json()
+    new_id = len(booking) + 1
+    data["id"] = new_id
+    booking.append(data)
+    return {"booking": booking}
 
 @app.route("/api/booking", methods=["GET"])
 def list_booking():
