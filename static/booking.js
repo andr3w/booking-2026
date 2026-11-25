@@ -1,3 +1,5 @@
+const maxBookingsPerPerson= 2;
+
 document.body.append(
     $m('div', {class: 'booking-list'},[
         $m('h2', {}, 'Bookings'),            
@@ -22,15 +24,16 @@ function updateList(r){
                             })
                     }}, 'Delete'))
             ]))
-        )
+        );
+    validate();
 }
 /* Build the add booking controls */
 document.body.append(
     $m('div', {class: 'booking-controls'},[
         $m('h2', {}, 'Add Booking'),
         $m('label', ['When',$m('input', {id:'whn',value:'2026-11-26'})]),
-        $m('label', ['Who', $m('input', {id:'who',value:'andrew'})]),
-        $m('button',{onclick:()=>{
+        $m('label', ['Who', $m('input', {id:'who',value:'andrew',onblur:validate})]),
+        $m('button#mis',{onclick:()=>{
             let payload = {
                 who:$i('who').value,
                 whn:$i('whn').value
@@ -45,3 +48,12 @@ document.body.append(
         }},'Make it so')
     ])
 );
+
+function validate(){
+    return;
+    const who = $i('who').value;
+    const matches = Array.from(document.querySelectorAll('#booking-table tr td.who'))
+        .filter(td=>td.innerText === who);
+    $i('mis').disabled = matches.length >= maxBookingsPerPerson;
+}
+

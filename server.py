@@ -1,9 +1,10 @@
 from flask import Flask, request
+maxBookingsPerPerson= 2;
 
 app = Flask(__name__)
 booking = [
-    {"id":1, "whn":"2026-11-25","who":"Andrew"},
-    {"id":2, "whn":"2026-11-27","who":"Andrew"},
+    {"id":1, "whn":"2026-11-25","who":"andrew"},
+    {"id":2, "whn":"2026-11-27","who":"andrew"},
 ]
 
 @app.route("/", methods=["GET"])
@@ -17,9 +18,12 @@ def index():
 @app.route("/api/booking", methods=["POST"])
 def make_booking():
     data = request.get_json()
-    new_id = len(booking) + 1
-    data["id"] = new_id
-    booking.append(data)
+    if len([b for b in booking if b['who']==data['who']]) < maxBookingsPerPerson:
+        new_id = len(booking) + 1
+        data["id"] = new_id
+        booking.append(data)
+    else:
+        return {"error": "Booking limit reached for this person."}, 400
     return {"booking": booking}
 
 @app.route("/api/booking/<id>", methods=["DELETE"])
