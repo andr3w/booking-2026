@@ -11,6 +11,7 @@ def index():
     return """
     <script src=/static/m.js defer></script>
     <script src=/static/booking.js defer></script>
+    <link rel="stylesheet" href=/static/booking.css>
     <h1>Welcome to the Booking API</h1>"""
 
 @app.route("/api/booking", methods=["POST"])
