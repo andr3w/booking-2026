@@ -1,22 +1,29 @@
+document.body.append(
+    $m('div', {class: 'booking-list'},[
+        $m('h2', {}, 'Bookings'),            
+        $m('table', {id:'booking-table'},)
+        ]));
 fetch('/api/booking')
     .then(r => r.json())
-    .then(r => {
-        document.body.append(
-            $m('div', {class: 'booking-list'},[
-                $m('h2', {}, 'Bookings'),            
-                $m('table', {class:'booking-table'},
-                    r.booking.map((b)=>
-                        $m('tr',[
-                            $m('td', {class:'who'}, b.who),
-                            $m('td', {class:'whn'}, b.whn),
-                            $m('td', {class:'delete'}, $m('button', {onclick:()=>{
-                                fetch('/api/booking/'+b.id, {method:'DELETE'})
-                            }}, 'Delete'))
-                    ]))
-                )]
-            ))
-    });
+    .then(r => updateList(r));
 
+
+function updateList(r){
+    $i('booking-table').replaceChildren(
+        ...r.booking.map((b)=>
+                $m('tr',[
+                    $m('td', {class:'who'}, b.who),
+                    $m('td', {class:'whn'}, b.whn),
+                    $m('td', {class:'delete'}, $m('button', {onclick:()=>{
+                        fetch('/api/booking/'+b.id, {method:'DELETE'})
+                            .then(r=>r.json())
+                            .then(r=>{
+                                updateList(r);
+                            })
+                    }}, 'Delete'))
+            ]))
+        )
+}
 /* Build the add booking controls */
 document.body.append(
     $m('div', {class: 'booking-controls'},[
@@ -33,7 +40,7 @@ document.body.append(
                 body:JSON.stringify(payload),
                 headers: {'Content-Type': 'application/json'}
             }).then(r=>r.json()).then(r=>{
-                console.log('booking added',r)
+                updateList(r);
             })
         }},'Make it so')
     ])
