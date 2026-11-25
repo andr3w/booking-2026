@@ -1,11 +1,20 @@
 fetch('/api/booking')
     .then(r => r.json())
     .then(r => {
-        r.booking.forEach((b)=>{
-            let div = document.createElement('div');
-            div.innerHTML = `${b.whn}`
-            document.body.append(div);
-        })
+        document.body.append(
+            $m('div', {class: 'booking-list'},[
+                $m('h2', {}, 'Bookings'),            
+                $m('table', {class:'booking-table'},
+                    r.booking.map((b)=>
+                        $m('tr',[
+                            $m('td', {class:'who'}, b.who),
+                            $m('td', {class:'whn'}, b.whn),
+                            $m('td', {class:'delete'}, $m('button', {onclick:()=>{
+                                fetch('/api/booking/'+b.id, {method:'DELETE'})
+                            }}, 'Delete'))
+                    ]))
+                )]
+            ))
     });
 
 /* Build the add booking controls */

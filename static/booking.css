@@ -1,7 +1,8 @@
 body{
     font-family: Arial, sans-serif;
 }
-.booking-controls{
+.booking-controls, .booking-list{
     border:solid thin black;
     padding:1em;
+    margin:1em;
 }

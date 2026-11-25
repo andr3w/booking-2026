@@ -22,6 +22,12 @@ def make_booking():
     booking.append(data)
     return {"booking": booking}
 
+@app.route("/api/booking/<id>", methods=["DELETE"])
+def rm_booking(id):
+    global booking
+    booking = [b for b in booking if str(b["id"]) != id]
+    return {"booking": booking}
+
 @app.route("/api/booking", methods=["GET"])
 def list_booking():
     return {"booking": booking}
