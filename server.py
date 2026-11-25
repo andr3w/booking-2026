@@ -8,7 +8,9 @@ booking = [
 
 @app.route("/", methods=["GET"])
 def index():
-    return "<h1>Welcome to the Booking API</h1>"
+    return """
+    <script src=/static/booking.js defer></script>
+    <h1>Welcome to the Booking API</h1>"""
 
 @app.route("/api/booking", methods=["GET"])
 def list_booking():
